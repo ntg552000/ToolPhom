@@ -1,27 +1,30 @@
-import java.util.Scanner;
+import lombok.Data;
 
+@Data
 public class Board {
-    private Player player1, player2, player3, hiddenCards;
+    private Player[] players = new Player[3];
+    private Player cardInBoard;
+    private int amountOfHiddenCards;
 
     public Board(){
-        player1 = new Player();
-        player2 = new Player();
-        player3 = new Player();
-        hiddenCards = new Player();
+        for(int i=0;i<3;i++){
+            players[i] = new Player();
+        }
+        cardInBoard = new Player();
     }
 
     public void distributeCards(int[] myCards){
-        Integer[][] rateTable = player1.getRateTable();
+        Integer[][] rateTable = players[0].getRateTable();
         for(int card: myCards){
             rateTable[card/10][card%10] = 0;
         }
-        player1.setRateTable(rateTable);
-        player2.setRateTable(rateTable.clone());
-        player3.setRateTable(rateTable.clone());
-        hiddenCards.setRateTable(rateTable.clone());
+        for(Player player:players){
+            player.setRateTable(rateTable.clone());
+        }
+        cardInBoard.setRateTable(rateTable);
     }
 
-    public void updateRateEqualCard(int card){
+    public void updateRateEqualCard(Player player, int card){
         for(int i=1;i<5;i++){
             int equalCard = i*10 + card%10;
             if(equalCard != card){
@@ -34,8 +37,6 @@ public class Board {
         player.setNumOfCards(player.getNumOfCards()-1);
         Integer[][] rateTable = player.getRateTable();
 
-
-        rateTable[card/10][card%10]
     }
 
 
